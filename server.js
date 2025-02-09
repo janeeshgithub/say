@@ -5,20 +5,31 @@ const quotes = require("./quotes");
 const app = express();
 app.use(cors()); // Enable CORS for all origins
 
-let lastQuoteIndex = -1;
+let shuffledQuotes = [...quotes]; // Copy of quotes array
+let currentIndex = 0;
+
+// Fisher-Yates shuffle function
+const shuffleArray = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+};
+
+// Shuffle quotes initially
+shuffleArray(shuffledQuotes);
 
 app.get("/quote", (req, res) => {
-  let randomIndex;
+  const quote = shuffledQuotes[currentIndex];
 
-  // Ensure a new quote is selected
-  do {
-    randomIndex = Math.floor(Math.random() * quotes.length);
-  } while (randomIndex === lastQuoteIndex);
+  // Move to next quote, reset if at the end
+  currentIndex = (currentIndex + 1) % shuffledQuotes.length;
 
-  lastQuoteIndex = randomIndex;
+  // Reshuffle when cycle completes
+  if (currentIndex === 0) shuffleArray(shuffledQuotes);
 
-  res.json({ quote: quotes[randomIndex] });
+  res.json({ quote });
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
