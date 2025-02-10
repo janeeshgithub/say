@@ -1,11 +1,13 @@
 const express = require("express");
 const cors = require("cors");
+const figlet = require("figlet");
+const chalk = require("chalk");
 const quotes = require("./quotes");
 
 const app = express();
-app.use(cors()); // Enable CORS for all origins
+app.use(cors());
 
-let shuffledQuotes = [...quotes]; // Copy of quotes array
+let shuffledQuotes = [...quotes];
 let currentIndex = 0;
 
 // Fisher-Yates shuffle function
@@ -33,9 +35,23 @@ app.get("/", (req, res) => {
   const isCurl = /curl|wget/i.test(userAgent);
 
   if (isCurl) {
-    // Plain text for curl
-    res.setHeader("Content-Type", "text/plain");
-    return res.send(quote);
+    // Randomly select colors
+    const colors = [chalk.red, chalk.green, chalk.yellow, chalk.blue, chalk.magenta, chalk.cyan];
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+    // Convert quote to ASCII Art
+    figlet.text(quote, { font: "Standard" }, (err, asciiArt) => {
+      if (err) {
+        res.setHeader("Content-Type", "text/plain");
+        return res.send(quote); // Fallback to plain text if error occurs
+      }
+
+      const coloredAsciiArt = randomColor(asciiArt);
+      res.setHeader("Content-Type", "text/plain");
+      return res.send(coloredAsciiArt);
+    });
+
+    return;
   }
 
   // HTML response for browsers
@@ -86,7 +102,6 @@ app.get("/", (req, res) => {
             text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.2);
           }
 
-          /* Refresh Button */
           .refresh-btn {
             position: absolute;
             top: 20px;
