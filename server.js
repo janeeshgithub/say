@@ -1,13 +1,11 @@
 const express = require("express");
 const cors = require("cors");
-const figlet = require("figlet");
-const chalk = require("chalk");
 const quotes = require("./quotes");
 
 const app = express();
-app.use(cors());
+app.use(cors()); // Enable CORS for all origins
 
-let shuffledQuotes = [...quotes];
+let shuffledQuotes = [...quotes]; // Copy of quotes array
 let currentIndex = 0;
 
 // Fisher-Yates shuffle function
@@ -35,23 +33,30 @@ app.get("/", (req, res) => {
   const isCurl = /curl|wget/i.test(userAgent);
 
   if (isCurl) {
-    // Randomly select colors
-    const colors = [chalk.red, chalk.green, chalk.yellow, chalk.blue, chalk.magenta, chalk.cyan];
+    // List of ANSI color codes
+    const colors = [
+      "\x1b[31m", // Red
+      "\x1b[32m", // Green
+      "\x1b[33m", // Yellow
+      "\x1b[34m", // Blue
+      "\x1b[35m", // Magenta
+      "\x1b[36m", // Cyan
+      "\x1b[91m", // Bright Red
+      "\x1b[92m", // Bright Green
+      "\x1b[93m", // Bright Yellow
+      "\x1b[94m", // Bright Blue
+      "\x1b[95m", // Bright Magenta
+      "\x1b[96m", // Bright Cyan
+    ];
+
+    // Choose a random color
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
 
-    // Convert quote to ASCII Art
-    figlet.text(quote, { font: "Standard" }, (err, asciiArt) => {
-      if (err) {
-        res.setHeader("Content-Type", "text/plain");
-        return res.send(quote); // Fallback to plain text if error occurs
-      }
+    // Format the quote with the random color
+    const colorfulQuote = `${randomColor}"${quote}"\x1b[0m`; // Reset color at the end
 
-      const coloredAsciiArt = randomColor(asciiArt);
-      res.setHeader("Content-Type", "text/plain");
-      return res.send(coloredAsciiArt);
-    });
-
-    return;
+    res.setHeader("Content-Type", "text/plain");
+    return res.send(colorfulQuote);
   }
 
   // HTML response for browsers
@@ -102,6 +107,7 @@ app.get("/", (req, res) => {
             text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.2);
           }
 
+          /* Refresh Button */
           .refresh-btn {
             position: absolute;
             top: 20px;
