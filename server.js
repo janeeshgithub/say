@@ -28,8 +28,49 @@ app.get("/quote", (req, res) => {
   // Reshuffle when cycle completes
   if (currentIndex === 0) shuffleArray(shuffledQuotes);
 
-  res.json({ quote });
+  // Detect if request is from a terminal (curl/wget)
+  const userAgent = req.headers["user-agent"] || "";
+  const isCurl = /curl|wget/i.test(userAgent);
+
+  if (isCurl) {
+    // Plain text for curl
+    res.setHeader("Content-Type", "text/plain");
+    return res.send(quote);
+  }
+
+  // HTML response for browsers
+  res.send(`
+    <html>
+      <head>
+        <title>Random Quote</title>
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+        <style>
+          body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+          }
+          blockquote {
+            font-size: 1.5rem;
+            font-style: italic;
+            margin: 20px auto;
+            width: 60%;
+            border-left: 4px solid #0f0;
+            padding-left: 15px;
+          }
+        </style>
+      </head>
+      <body>
+        <h1>Random Quote</h1>
+        <blockquote>${quote}</blockquote>
+      </body>
+    </html>
+  `);
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+app.listen(PORT, () =>
+  console.log(`Server running on http://localhost:${PORT}`)
+);
