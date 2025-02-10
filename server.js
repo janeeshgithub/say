@@ -1,5 +1,7 @@
 const express = require("express");
 const cors = require("cors");
+const figlet = require("figlet");
+const chalk = require("chalk");
 const quotes = require("./quotes");
 
 const app = express();
