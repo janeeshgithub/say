@@ -1,5 +1,5 @@
 const quotes = [
-    "You miss 100% of the shots you don’t take. - Wayne Gretzky",
+    "You miss 100% of the shots you don’t take.",
     "One day, the people that don’t even believe in you will tell everyone how they met you.",
     "Let the improvement of yourself keep you so busy that you have no time to criticize others.",
     "If you live for people’s acceptance, you will die from their rejection.",
