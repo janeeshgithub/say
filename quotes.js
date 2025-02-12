@@ -1,87 +1,53 @@
-const quotes = [
-    "You miss 100% of the shots you don’t take.",
-    "One day, the people that don’t even believe in you will tell everyone how they met you.",
-    "Let the improvement of yourself keep you so busy that you have no time to criticize others.",
-    "If you live for people’s acceptance, you will die from their rejection.",
-    "Be selfish with your time. A lot of people don’t deserve it.",
-    "You don’t need more time, you need less distractions.",
-    "Don’t go broke trying to impress broke people.",
-    "Do yourself a favor, get rich. Life gets easier with money, not time.",
-    "If you are a giver, remember to learn your limits because the takers don’t have any.",
-    "No one is too busy, it’s only a matter of priorities.",
-    "Remember, some of the best times of your life haven’t even happened yet.",
-    "When you build in silence, people don’t know what to attack.",
-    "The moment you let go of your discipline is the moment you give up on yourself.",
-    "The possibilities are endless as long as you don’t limit yourself.",
-    "Set high standards for yourself and live up to your own expectations.",
-    "Remove the clowns from your life before you become one.",
-    "The master has failed more times than the beginner has even tried.",
-    "Once you realize you deserve better, letting go will be the best decision ever.",
-    "Loneliness is the price you pay when you start to improve yourself.",
-    "The truth is, everyone is going to hurt you. You just gotta find the ones worth suffering for.",
-    "If you look at the people in your circle and you don’t get inspired, you don’t have a circle. You have a cage.",
-    "Free yourself from society’s advice; most of them have no idea what they’re doing.",
-    "The family you create is more important than the family you come from.",
-    "The best thing I ever did was stop telling people what’s going on in my life.",
-    "The world doesn’t owe you anything. Your work is the price you pay for what you want.",
-    "If you want something you've never had, you’ll have to do something you’ve never done.",
-    "Quit wishing for fewer problems. Start wishing for more strength to handle them.",
-    "When you feel like giving up, remember why you started. Then work harder.",
-    "If you're not willing to go all in, don't even bother trying.",
-    "Comfort is the enemy of progress. If you're comfortable, you're not growing.",
-    "Pain is temporary, but quitting lasts forever. Don’t let a momentary struggle steal your future.",
-    "Success isn’t given. It’s earned, one grueling step at a time.",
-    "Every no you hear, every failure you face is just a test to see if you're willing to bleed for your dreams.",
-    "Stop waiting for the ‘right moment.’ The right moment is now, or it will never come.",
-    "You’ll never reach the top if you’re afraid to climb. Risk it all. You have nothing to lose.",
-    "You don’t deserve to complain until you’ve put in the work to be heard.",
-    "Dreams are free, but the price to make them real is the blood, sweat, and tears you’re willing to give.",
-    "You can’t outsmart hard work. It’s the one thing that will always catch up with you.",
-    "No one cares about your excuses. They only care about your results.",
-    "Your hardest days are the ones that shape you into the person you need to be.",
-    "If you’re not waking up every day ready to put in the work, you’re not hungry enough.",
-    "If you're not obsessed with your goal, you're not serious about it. Obsession is the fuel of success.",
-    "The price of success is sweat. The cost of failure is regret. Which one are you paying today?",
-    "You don’t have time to rest when you’re building the empire you’ve always dreamed of.",
-    "The grind doesn’t care about your excuses. It cares about your results.",
-    "You can’t complain about being stuck if you're too comfortable to move.",
-    "Don’t wait for motivation to hit. Chase it until it surrenders to you.",
-    "The only way to outgrow your past is to outwork it.",
-    "You can either build your dreams, or someone else will hire you to build theirs.",
-    "If you don’t show up for your future today, it won’t show up for you tomorrow.",
-    "Tired of being stuck? Start doing what others are avoiding—go first.",
-    "Your competition is working harder than you think. Don’t let them pass you while you’re waiting for ‘perfect.’",
-    "Hustle is the difference between what you want and what you’re willing to work for.",
-    "The universe doesn’t give you what you wish for; it gives you what you work for.",
-    "Your future self is begging you to outwork your excuses today.",
-    "The pain of regret weighs heavier than the pain of discipline. Choose wisely.",
-    "The only time success comes before work is in the dictionary.",
-    "You’ll never get results by sitting back and wishing. Stand up and make it happen.",
-    "When the world says ‘give up,’ your hard work says ‘keep going.’",
-    "You’ve got two choices: stay where you are and complain, or fight through the grind and level up.",
-    "The road to success is not a shortcut—it’s a long, relentless journey that demands your all.",
-    "Don’t let comfort make you lazy. Real growth happens outside your safe zone.",
-    "Success doesn’t know your name. It only knows your effort.",
-    "Work until your idols become your rivals. Then work harder.",
-    "The only limit to our realization of tomorrow is our doubts of today.",
-    "Success is the sum of small efforts, repeated day in and day out.",
-    "Discipline is the bridge between goals and accomplishment.",
-    "Don’t stop when you’re tired. Stop when you’re done.",
-    "Hardships often prepare ordinary people for an extraordinary destiny.",
-    "The difference between who you are and who you want to be is what you do.",
-    "The future belongs to those who believe in the beauty of their dreams.",
-    "It does not matter how slowly you go as long as you do not stop.",
-    "Your limitation—it’s only your imagination.",
-    "Greatness is not in where we stand, but in what direction we are moving.",
-    "Success is not in what you have, but who you are.",
-    "You can never cross the ocean until you have the courage to lose sight of the shore.",
-    "The harder you work for something, the greater you’ll feel when you achieve it.",
-    "If you’re going through hell, keep going.",
-    "Don’t count the days, make the days count.",
-    "Everything you can imagine is real.",
-    "There are no shortcuts to any place worth going.",
-    "The best time to plant a tree was 20 years ago. The second best time is now.",
-    "Wake up with determination. Go to bed with satisfaction."
-];
+const fs = require("fs");
+const path = require("path");
 
-module.exports = quotes;
+const quotesFilePath = path.join(__dirname, "quotes.json");
+
+// Function to read quotes from JSON
+const getQuotes = () => {
+  const data = fs.readFileSync(quotesFilePath, "utf-8");
+  return JSON.parse(data);
+};
+
+// HTML Template
+const htmlTemplate = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Quotes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(to right, #667eea, #764ba2);
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+        .quote-box {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        .quote {
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="quote-box">
+        <p class="quote">"{{QUOTE}}"</p>
+        <p class="text-sm mt-3 opacity-80">🔄 Refresh for a new quote</p>
+    </div>
+</body>
+</html>`;
+
+module.exports = { getQuotes, htmlTemplate };
