@@ -2,10 +2,14 @@ const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
+const https = require("https");
+const http = require("http");
 const quotes = require("./quotes");
 const jokes = require("./jokes"); // Import jokes from jokes.js
 
 const figlet = require("figlet");
+
+
 
 const app = express();
 app.use(cors()); // Enable CORS for all origins
