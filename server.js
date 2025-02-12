@@ -8,6 +8,8 @@ const quotes = require("./quotes");
 const jokes = require("./jokes"); // Import jokes from jokes.js
 
 const figlet = require("figlet");
+const enforce = require("express-force-https");
+app.use(enforce);
 
 const app = express();
 app.use(cors()); // Enable CORS for all origins
