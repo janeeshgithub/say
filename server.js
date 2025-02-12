@@ -9,9 +9,10 @@ const jokes = require("./jokes"); // Import jokes from jokes.js
 
 const figlet = require("figlet");
 const enforce = require("express-force-https");
-app.use(enforce);
 
-const app = express();
+const app = express(); // ✅ Initialize app first
+app.use(enforce); // ✅ Now use enforce middleware
+
 app.use(cors()); // Enable CORS for all origins
 
 let shuffledQuotes = [...quotes];
@@ -39,7 +40,7 @@ const colors = [
   "\x1b[93m", // Bright Yellow
   "\x1b[94m", // Bright Blue
   "\x1b[95m", // Bright Magenta
-  "\x1b[96m", // Bright Cyan
+  "\x1b[96m", // Bright Cyan,
 ];
 
 // Function to add random color to text
@@ -47,6 +48,17 @@ const colorize = (text) => {
   const randomColor = colors[Math.floor(Math.random() * colors.length)];
   return `${randomColor}${text}\x1b[0m`; // Reset color at the end
 };
+
+// Middleware: Force HTTPS Manually in Development
+app.use((req, res, next) => {
+  if (
+    process.env.NODE_ENV === "production" &&
+    req.headers["x-forwarded-proto"] !== "https"
+  ) {
+    return res.redirect("https://" + req.headers.host + req.url);
+  }
+  next();
+});
 
 // 🎭 Joke Endpoint - Returns a random joke
 app.get("/joke", (req, res) => {
@@ -136,6 +148,7 @@ Run the following commands to fetch data:
   res.send(`<pre>${responseText.replace(/\x1b\[\d+m/g, "")}</pre>`); // Remove ANSI codes for browser
 });
 
+// Start Server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, "0.0.0.0", () =>
   console.log(`Server running on http://localhost:${PORT}`)
