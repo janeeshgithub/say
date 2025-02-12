@@ -1,8 +1,11 @@
 const express = require("express");
 const cors = require("cors");
+const axios = require("axios");
+
 const { getQuotes, htmlTemplate: quotesHtml } = require("./quotes");
 const { getJokes, htmlTemplate: jokesHtml } = require("./jokes");
 const { generateUnisonResponse } = require("./unison");
+const { janeesh } = require("./janeesh");
 
 const app = express();
 app.use(cors());
@@ -13,9 +16,18 @@ let currentIndex = 0;
 
 // ANSI Color Codes for terminal output
 const colors = [
-  "\x1b[31m", "\x1b[32m", "\x1b[33m", "\x1b[34m",
-  "\x1b[35m", "\x1b[36m", "\x1b[91m", "\x1b[92m",
-  "\x1b[93m", "\x1b[94m", "\x1b[95m", "\x1b[96m",
+  "\x1b[31m",
+  "\x1b[32m",
+  "\x1b[33m",
+  "\x1b[34m",
+  "\x1b[35m",
+  "\x1b[36m",
+  "\x1b[91m",
+  "\x1b[92m",
+  "\x1b[93m",
+  "\x1b[94m",
+  "\x1b[95m",
+  "\x1b[96m",
 ];
 
 // Function to add random color to text
@@ -25,7 +37,7 @@ const colorize = (text) => {
 };
 
 // 📜 Home Route (Unison)
-app.get("/", (req, res) => {
+app.get("/unison", (req, res) => {
   const responseText = generateUnisonResponse();
 
   // Detect terminal request
@@ -77,6 +89,24 @@ app.get("/joke", (req, res) => {
   res.send(htmlResponse);
 });
 
+app.get("/", (req, res) => {
+  const { terminalOutput, htmlOutput } = janeesh();
+
+  // Detect terminal request
+  const userAgent = req.headers["user-agent"] || "";
+  const isCurl = /curl|wget/i.test(userAgent);
+
+  if (isCurl) {
+    res.setHeader("Content-Type", "text/plain; charset=utf-8");
+    return res.send(terminalOutput);
+  }
+
+  res.setHeader("Content-Type", "text/html");
+  res.send(htmlOutput);
+});
+
 // Start Server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+app.listen(PORT, () =>
+  console.log(`Server running on http://localhost:${PORT}`)
+);
