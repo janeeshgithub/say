@@ -9,8 +9,6 @@ const jokes = require("./jokes"); // Import jokes from jokes.js
 
 const figlet = require("figlet");
 
-
-
 const app = express();
 app.use(cors()); // Enable CORS for all origins
 
@@ -80,141 +78,8 @@ app.get("/", (req, res) => {
     return res.send(colorize(`"${quote}"`)); // Send colored quote
   }
 
-  // HTML response for browsers
-  res.send(`
-    <html>
-      <head>
-        <title>Hustle Quotes</title>
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-        <style>
-          body {
-            background-color: #000;
-            color: #fff;
-            font-family: "Arial", sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-          }
-          
-          .container {
-            background: #111;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
-            text-align: center;
-            max-width: 600px;
-            width: 80%;
-            animation: fadeIn 1s ease-in-out;
-          }
-
-          h1 {
-            font-size: 2rem;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-          }
-
-          blockquote {
-            font-size: 1.4rem;
-            font-style: italic;
-            margin: 20px 0;
-            padding: 20px;
-            border-left: 4px solid #fff;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.2);
-          }
-
-          .refresh-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: transparent;
-            border: 2px solid white;
-            color: white;
-            padding: 10px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 18px;
-            transition: 0.3s;
-          }
-
-          .refresh-btn:hover {
-            background: white;
-            color: black;
-          }
-
-          @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-          }
-        </style>
-      </head>
-      <body>
-        <button class="refresh-btn" onclick="location.reload()">🦋</button>
-        <div class="container">
-          <h1>Axiom</h1>
-          <blockquote>${quote}</blockquote>
-        </div>
-      </body>
-    </html>
-  `);
+  res.json({ quote });
 });
-
-// app.get("/unison", (req, res) => {
-//   const asciiBanner = figlet.textSync("Welcome to UNISON", {
-//     font: "Standard", // You can change the font to others like "Slant", "Small", "Big"
-//     horizontalLayout: "default",
-//     verticalLayout: "default",
-//   });
-
-//   const responseText = `\x1b[36m${asciiBanner}\x1b[0m
-
-// \x1b[33m🚀 Welcome to Axiom API\x1b[0m
-// ---------------------------------------
-// A simple API serving quotes and jokes
-// with colorful terminal output.
-
-// \x1b[34m🌟 Features:\x1b[0m
-// - 🔥 Fetch motivational quotes
-// - 🎭 Get random jokes
-// - 📖 Read README.md in style
-
-// \x1b[32m📌 Available Endpoints:\x1b[0m
-// ---------------------------------------
-// 🔹 \x1b[35m/\x1b[0m         - Get a random quote
-// 🔹 \x1b[35m/joke\x1b[0m     - Get a random joke
-// 🔹 \x1b[35m/unison\x1b[0m   - Read README.md
-
-// \x1b[31m💡 Usage:\x1b[0m
-// ---------------------------------------
-// Run the following commands to fetch data:
-
-// \x1b[36m$ curl -L janeesh.me\x1b[0m   # Get a quote
-// \x1b[36m$ curl -L janeesh.me/joke\x1b[0m   # Get a joke
-// \x1b[36m$ curl -L janeesh.me/unison\x1b[0m   # Read the README
-
-// \x1b[32m💻 Tech Stack:\x1b[0m
-// ---------------------------------------
-// - Node.js 🟢
-// - Express.js 🚀
-// - JavaScript ⚡
-
-// \x1b[35m✨ Made with passion. Keep Hustling! ✨\x1b[0m`;
-
-//   // Detect terminal request
-//   const userAgent = req.headers["user-agent"] || "";
-//   const isCurl = /curl|wget/i.test(userAgent);
-
-//   if (isCurl) {
-//     res.setHeader("Content-Type", "text/plain; charset=utf-8");
-//     return res.send(responseText);
-//   }
-
-//   res.send(`<pre>${responseText.replace(/\x1b\[\d+m/g, "")}</pre>`); // Remove ANSI codes for browser
-// });
 
 app.get("/unison", (req, res) => {
   const asciiBanner = figlet.textSync("UNISON", {
