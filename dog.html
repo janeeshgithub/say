@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RaImage</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin: 20px;
+      }
+      img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        margin-top: 20px;
+        display: none;
+      }
+      #loading {
+        font-size: 18px;
+        color: #007bff;
+        margin-top: 20px;
+      }
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        margin-top: 20px;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Random Neko Image</h1>
+    <button onclick="fetchImage()">Get Random Neko</button>
+    <br />
+    <p id="loading">Loading...</p>
+    <img id="randomImage" src="" alt="Image will appear here" />
+    
+    <script>
+      const fetchImage = async () => {
+        document.getElementById("loading").style.display = "block"; // Show loading text
+        document.getElementById("randomImage").style.display = "none"; // Hide image
+
+        try {
+          // Make a request to our server's endpoint
+          const response = await fetch("/api/neko");
+          const data = await response.json();
+          
+          // Update the image source
+          const imageUrl = data.imageUrl;
+          const imageElement = document.getElementById("randomImage");
+          imageElement.src = imageUrl;
+          imageElement.style.display = "block"; // Show image after update
+
+          document.getElementById("loading").style.display = "none"; // Hide loading text
+        } catch (error) {
+          console.error("Error fetching image:", error);
+          document.getElementById("loading").innerText = "Failed to load image."; // Error message
+        }
+      };
+    </script>
+  </body>
+</html>
